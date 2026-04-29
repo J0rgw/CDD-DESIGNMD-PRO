@@ -1,0 +1,57 @@
+{
+  "name": "cdd-designmd-pro",
+  "version": "0.1.0",
+  "description": "Claude Code skill that extends Google's DESIGN.md with theming axes, token tiers, invariants, anti-patterns, and runtime declarations. Provides BOOTSTRAP, AUDIT, and REFACTOR capabilities for frontend codebases.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "J0rgw",
+    "url": "https://github.com/J0rgw"
+  },
+  "homepage": "https://github.com/J0rgw/cdd-designmd-pro",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/J0rgw/cdd-designmd-pro.git"
+  },
+  "bugs": {
+    "url": "https://github.com/J0rgw/cdd-designmd-pro/issues"
+  },
+  "keywords": [
+    "claude-code",
+    "skill",
+    "design-system",
+    "design.md",
+    "design-tokens",
+    "audit",
+    "refactor"
+  ],
+  "engines": {
+    "bun": ">=1.2.0",
+    "node": ">=20.0.0"
+  },
+  "designmd": {
+    "supportedSpec": "alpha",
+    "supportedVersion": "0.1.x",
+    "extends": "@google/design.md"
+  },
+  "scripts": {
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "spec": "design.md spec",
+    "validate:examples": "echo 'TODO: validate examples/ against @google/design.md spec'",
+    "prepare": "echo 'lefthook install pending session 2'"
+  },
+  "dependencies": {
+    "@google/design.md": "^0.1.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.0",
+    "@types/node": "^22.0.0",
+    "lefthook": "^1.7.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
