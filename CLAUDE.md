@@ -33,6 +33,7 @@ the right. Do not edit blindly.
 | `tests/**`                        | the `src/` it covers                         |
 | `examples/**`                     | upstream `design.md spec` output             |
 | `templates/**`                    | `SKILL.md` capability section it serves      |
+| `skill-workflows/**`              | `SKILL.md` capability section it serves      |
 | `.github/workflows/**`            | `package.json#scripts`                       |
 
 ## Conventions

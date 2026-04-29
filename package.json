@@ -45,7 +45,7 @@
     "prepare": "echo 'lefthook install pending session 2'"
   },
   "dependencies": {
-    "@google/design.md": "^0.1.1"
+    "@google/design.md": "0.1.1"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.0",
