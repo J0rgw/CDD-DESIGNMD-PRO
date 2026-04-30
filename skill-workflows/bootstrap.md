@@ -136,6 +136,29 @@ With the plan confirmed, the skill assembles the DESIGN.md:
 The skill never invents brand colors or fonts the user did not
 provide; missing values stay neutral.
 
+### Brand color contrast resolution
+
+When the user provides a brand primary or accent that fails WCAG-AA
+against white text (typical contrast threshold 4.5:1), BOOTSTRAP
+defaults to dark text on that color, not white text.
+
+Rationale: a skill named "auditor" cannot ship DESIGN.md outputs
+that fail the upstream linter. Dark-on-bright passes AA reliably
+for most brand hues; white-on-bright fails for any hue with
+luminance above ~0.4.
+
+This default is silent — BOOTSTRAP applies it without prompting.
+If the user explicitly wants white text on bright brand, they
+must darken the brand hex during interview Q7 or override the
+generated text-on-primary token after generation.
+
+This convention is consistent across:
+
+- text-on-primary (paired with brand primary)
+- text-on-accent (paired with brand accent)
+- text-on-status-* (paired with status backgrounds, see also
+  Decision 2 of session 2.5)
+
 ## Phase 5 — Handoff
 
 The skill delivers:
