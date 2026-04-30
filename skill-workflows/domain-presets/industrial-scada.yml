@@ -1,0 +1,53 @@
+# Industrial / SCADA domain preset
+preset:
+  name: industrial-scada
+  description: |
+    Invariants for industrial control and monitoring interfaces. Based
+    on ISA-101 (HMI design) and ISA-18.2 (alarm management).
+  references:
+    - ANSI/ISA-101.01-2015 (HMI for process automation)
+    - ANSI/ISA-18.2-2016 (alarm management)
+    - IEC 62682
+
+invariants:
+  - id: status-color-immutable
+    description: >
+      Status colors (normal/advisory/warning/critical/emergency) are
+      not customizable per tenant; they encode operational meaning,
+      not branding.
+    scope: colors.status-*
+    enforcement: ci-only
+    severity: error
+
+  - id: redundant-encoding
+    description: >
+      Each status communicated by AT LEAST color + symbol/shape. Color
+      alone is insufficient (color blindness, monochrome secondary
+      displays).
+    scope: components.status-indicator, components.alarm-*
+    enforcement: manual
+    severity: error
+
+  - id: calm-default-state
+    description: >
+      Normal/operational state is visually muted; saturation and color
+      intensity reserved for abnormal states.
+    scope: colors.surface-*, colors.text-* in nominal state
+    enforcement: manual
+    severity: warning
+
+  - id: alarm-priority-distinguishable
+    description: >
+      ISA-18.2 priority levels (low/medium/high/critical/emergency)
+      must be perceptually distinguishable, not just labeled.
+    scope: components.alarm-*
+    enforcement: manual
+    severity: error
+
+  - id: branding-excluded-from-status
+    description: >
+      Tenant brand colors must NOT influence status colors; runtime
+      branding scopes to accent and surface only.
+    scope: themingAxes.branding.excludedFrom must include status-*
+    enforcement: ci-only
+    severity: error

@@ -1,0 +1,52 @@
+# Healthcare / Medical domain preset
+preset:
+  name: healthcare
+  description: |
+    Invariants for clinical and health-monitoring interfaces. Combines
+    WCAG-AA with clinical UX conventions (vital ranges, alert hierarchy,
+    fatigue-resistant typography).
+  references:
+    - WCAG 2.1 Level AA
+    - IEC 60601-1-8 (alarm signals)
+    - HFE (Human Factors Engineering) for medical devices, FDA guidance
+
+invariants:
+  - id: vital-range-color-coding
+    description: >
+      Vital sign ranges (normal/abnormal/critical) follow standardized
+      color codes; out-of-range values must be visually distinct from
+      normal.
+    scope: components.vital-display, colors.vital-*
+    enforcement: ci-only
+    severity: error
+
+  - id: alert-hierarchy-iec60601
+    description: >
+      Alarm priority follows IEC 60601-1-8 (high=red+rapid,
+      medium=amber+intermediate, low=cyan+slow).
+    scope: components.alarm-*, colors.alarm-*
+    enforcement: manual
+    severity: error
+
+  - id: critical-not-silenceable-visually
+    description: >
+      Critical alerts cannot be dismissed by visual hover/focus alone
+      — explicit acknowledge action required.
+    scope: components.alarm-critical
+    enforcement: manual
+    severity: error
+
+  - id: minimum-type-size-clinical
+    description: >
+      Body type minimum 16px to support staff fatigue and varying
+      viewing distances; vital readouts minimum 24px.
+    scope: typography.body, typography.vital-readout
+    enforcement: automated
+    severity: warning
+
+  - id: contrast-aa-strict
+    description: >
+      All clinical text WCAG-AA minimum; critical readouts AAA.
+    scope: any text on any background in clinical context
+    enforcement: automated
+    severity: error

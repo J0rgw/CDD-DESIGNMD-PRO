@@ -1,0 +1,47 @@
+# Banking / Fintech domain preset
+# Source rationale: financial regulations + WCAG + readability under stress
+preset:
+  name: banking
+  description: |
+    Invariants for fintech and banking interfaces. Combines WCAG-AA
+    floors with conventions specific to financial UX (negative balances,
+    decimal precision, currency display, destructive actions).
+  references:
+    - WCAG 2.1 Level AA
+    - PSD2 strong customer authentication UX guidance
+    - common fintech conventions (Stripe, Square, Plaid examples)
+
+invariants:
+  - id: negative-balance-color
+    description: Negative monetary values must NOT be rendered in green.
+    scope: any token used for monetary value display
+    enforcement: ci-only
+    severity: error
+
+  - id: decimal-precision-fixed
+    description: Currency values must always display 2 decimal places.
+    scope: components.value-display, components.amount-display
+    enforcement: automated
+    severity: error
+
+  - id: currency-explicit
+    description: Currency symbol or ISO code always visible alongside amount.
+    scope: any monetary display
+    enforcement: manual
+    severity: warning
+
+  - id: destructive-confirmation
+    description: >
+      Actions that move money or close accounts require visual
+      confirmation distinct from regular CTAs.
+    scope: components.button-destructive
+    enforcement: manual
+    severity: error
+
+  - id: contrast-aa-monetary
+    description: >
+      Monetary values must meet WCAG-AA 4.5:1 even at smaller type
+      sizes (these are scanned, not read).
+    scope: components.value-display.textColor on backgroundColor
+    enforcement: automated
+    severity: error
