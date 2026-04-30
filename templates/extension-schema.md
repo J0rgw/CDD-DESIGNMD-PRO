@@ -310,7 +310,73 @@ role (paired role), and badge-success is a tier-3 component that
 combines both.
 
 Paired tokens may be collapsed when all members of a group share
-the same value — see Cross-extension rules below.
+the same value — see the collapse rule below.
+
+#### Collapse rule for uniform paired groups
+
+Paired tokens MAY be collapsed to a single group-level token when
+ALL members of a group share the same paired value.
+
+Example — five status colors all with sufficiently dark backgrounds
+to use the same light text:
+
+Expanded form (5 tokens):
+
+```yaml
+colors:
+  status-normal: "#1a3a2f"
+  status-advisory: "#1e3a5f"
+  status-warning: "#854d0e"
+  status-critical: "#7f1d1d"
+  status-emergency: "#581c87"
+  text-on-normal: "#f1f5f9"
+  text-on-advisory: "#f1f5f9"
+  text-on-warning: "#f1f5f9"
+  text-on-critical: "#f1f5f9"
+  text-on-emergency: "#f1f5f9"
+```
+
+Collapsed form (6 tokens, equivalent semantics):
+
+```yaml
+colors:
+  status-normal: "#1a3a2f"
+  status-advisory: "#1e3a5f"
+  status-warning: "#854d0e"
+  status-critical: "#7f1d1d"
+  status-emergency: "#581c87"
+  text-on-status-dark: "#f1f5f9"
+```
+
+Components reference the group-level token explicitly:
+
+```yaml
+components:
+  alarm-critical:
+    backgroundColor: "{colors.status-critical}"
+    textColor: "{colors.text-on-status-dark}"
+```
+
+When to use collapse:
+
+- All current members of the group share the paired value, AND
+- The group is naming a class of states (status, severity, priority), AND
+- The collapsed name explicitly indicates the shared trait
+  (`-dark` suffix, `-light` suffix, etc.)
+
+When NOT to use collapse:
+
+- Members differ in paired value (use expanded form)
+- The group will likely add members with different paired values
+  (use expanded form preemptively)
+
+Re-fragmentation rule: if a new member is added to a collapsed
+group whose paired value differs from the group's, the group MUST
+be re-fragmented (return all members to expanded form). AUDIT
+flags this as a structural change requiring review. Ad-hoc
+exceptions (one collapsed token + one specific paired token for
+the divergent member) are NOT permitted — this hybrid produces
+invisible inconsistency.
 
 ## Extension: invariants
 
