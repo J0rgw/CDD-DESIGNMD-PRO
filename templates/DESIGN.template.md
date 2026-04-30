@@ -13,9 +13,9 @@ colors:
   gray-300: "#c5cad3"
   gray-700: "#3a4150"
   gray-900: "#101319"
-  status-ok-bg: "#207a4a"
-  status-warn-bg: "#b87a07"
-  status-error-bg: "#a8341f"
+  status-ok: "#207a4a"
+  status-warn: "#b87a07"
+  status-error: "#a8341f"
   primary: "{colors.brand-500}"
   primary-hover: "{colors.brand-600}"
   surface: "{colors.gray-50}"
@@ -23,6 +23,9 @@ colors:
   text: "{colors.gray-900}"
   text-muted: "{colors.gray-700}"
   text-on-primary: "{colors.gray-50}"
+  text-on-ok: "{colors.gray-50}"
+  text-on-warn: "{colors.gray-900}"
+  text-on-error: "{colors.gray-50}"
   border: "{colors.gray-300}"
   accent: "{colors.brand-500}"
 typography:
@@ -105,20 +108,20 @@ components:
     padding: "{spacing.xs}"
     typography: "{typography.label-md}"
   status-ok:
-    backgroundColor: "{colors.status-ok-bg}"
-    textColor: "{colors.text-on-primary}"
+    backgroundColor: "{colors.status-ok}"
+    textColor: "{colors.text-on-ok}"
     rounded: "{rounded.full}"
     padding: "{spacing.xs}"
     typography: "{typography.label-md}"
   status-warn:
-    backgroundColor: "{colors.status-warn-bg}"
-    textColor: "{colors.text}"
+    backgroundColor: "{colors.status-warn}"
+    textColor: "{colors.text-on-warn}"
     rounded: "{rounded.full}"
     padding: "{spacing.xs}"
     typography: "{typography.label-md}"
   status-error:
-    backgroundColor: "{colors.status-error-bg}"
-    textColor: "{colors.text-on-primary}"
+    backgroundColor: "{colors.status-error}"
+    textColor: "{colors.text-on-error}"
     rounded: "{rounded.full}"
     padding: "{spacing.xs}"
     typography: "{typography.label-md}"
@@ -133,7 +136,7 @@ themingAxes:
     runtime: true
     source: tenant.theme_primary
     controls: [colors.accent]
-    excludedFrom: [colors.status-ok-bg, colors.status-warn-bg, colors.status-error-bg]
+    excludedFrom: [colors.status-ok, colors.status-warn, colors.status-error]
 tokenTiers:
   primitive:
     - colors.brand-500
@@ -143,9 +146,6 @@ tokenTiers:
     - colors.gray-300
     - colors.gray-700
     - colors.gray-900
-    - colors.status-ok-bg
-    - colors.status-warn-bg
-    - colors.status-error-bg
   semantic:
     - colors.primary
     - colors.primary-hover
@@ -154,8 +154,14 @@ tokenTiers:
     - colors.text
     - colors.text-muted
     - colors.text-on-primary
+    - colors.text-on-ok
+    - colors.text-on-warn
+    - colors.text-on-error
     - colors.border
     - colors.accent
+    - colors.status-ok
+    - colors.status-warn
+    - colors.status-error
   component:
     - components.button-primary.backgroundColor
     - components.button-secondary.backgroundColor
@@ -171,7 +177,7 @@ invariants:
       ratio: 4.5
   - id: status-color-stability
     description: Status colors are pinned by meaning and may not vary by axis.
-    scope: [colors.status-ok-bg, colors.status-warn-bg, colors.status-error-bg]
+    scope: [colors.status-ok, colors.status-warn, colors.status-error]
     enforcement: automated
     type: no-mutation
   - id: brand-primary-pin
@@ -245,12 +251,23 @@ the primitive ramp; component tokens reference the semantic layer.
   baseline canvas for content.
 - **Text (`#101319`):** body copy at maximum contrast.
 - **Border (`#c5cad3`):** the structural separator between surfaces.
-- **Status backgrounds (`#207a4a`, `#b87a07`, `#a8341f`):** pinned
-  by meaning; do not theme.
+- **Status (`#207a4a` ok, `#b87a07` warn, `#a8341f` error):** pinned
+  by meaning; do not theme. Each status colour has a paired
+  `text-on-*` semantic so components can declare both
+  `backgroundColor` and `textColor` via the semantic layer.
 
 The primitives in `colors.brand-*` and `colors.gray-*` are not
 intended to be used directly by components; route through the
 semantic layer.
+
+> **A note on warning color contrast.** This template pairs amber
+> warning backgrounds with dark text instead of the white-on-amber
+> convention common in consumer SaaS. The reason is WCAG-AA:
+> white-on-amber typically falls below the 4.5:1 contrast threshold,
+> and a skill called "auditor" cannot ship a template that fails its
+> own audit. If your branding requires the reverse pairing, increase
+> amber luminance until contrast passes — but verify with
+> `bunx @google/design.md lint` before deploying.
 
 ## Typography
 
@@ -368,6 +385,14 @@ The token tree is partitioned into three tiers:
 Tier inversion (a primitive that references a semantic, a semantic
 that references a component) is an error. The skill enforces this
 during AUDIT.
+
+The status colours illustrate the deliberate split this extension is
+designed to enforce: `colors.status-ok` is a tier-2 semantic
+expressing the *role* "ok", and `colors.text-on-ok` is a separate
+tier-2 semantic expressing the paired role "text used on top of ok".
+The tier-3 component (`status-ok` badge) combines them via
+`backgroundColor` + `textColor`. Collapsing background and text into
+a single token is the failure mode that `tokenTiers` exists to catch.
 
 ## Invariants
 
