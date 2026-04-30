@@ -155,6 +155,21 @@ the skill enforce reference direction: `component → semantic → primitive`.
 This extension applies to projects with more than ~30 tokens or with
 a pre-existing intent of separating raw palette from semantic roles.
 
+Semantic tokens typically reference primitives (e.g.,
+`surface-card: {colors.gray-900}`), enabling theme switching by
+swapping the underlying primitive. However, semantic tokens MAY
+hold literal values when the role itself prescribes the value
+canonically.
+
+Example: in safety-critical domains where ISA-101 or IEC 60601-1-8
+prescribes the exact hue for `status-critical`, that token is
+semantic-literal — its value is not derived from a brand primitive
+because the standard mandates the hue. Forcing an intermediate
+primitive ("crit-red-base") would be ceremony, not abstraction.
+
+Use semantic-literal only when the value is a normative or
+domain-mandated decision. The default remains semantic-reference.
+
 ### YAML schema
 
 ```yaml
@@ -222,6 +237,35 @@ tokenTiers:
     - components.card.borderColor
 ```
 
+### Component-tier path forms
+
+Tier-3 (component) entries in tokenTiers list paths to component
+declarations. Two valid forms:
+
+Component-rooted (declares the entire component as tier-3):
+
+```yaml
+tokenTiers:
+  component:
+    - components.button-primary
+    - components.alarm-banner
+```
+
+Sub-token-rooted (declares specific properties as tier-3 while
+others may inherit from semantic):
+
+```yaml
+tokenTiers:
+  component:
+    - components.button-primary.backgroundColor
+    - components.button-primary.textColor
+```
+
+Sub-token-rooted is more precise but verbose. Use it when a
+component mixes tiers (e.g., backgroundColor is component-tier
+with a custom value, but typography inherits from a semantic
+tier-2 token).
+
 ### Common mistakes
 
 - Listing the same token under both `primitive` and `semantic` —
@@ -242,6 +286,31 @@ tokenTiers:
 - A new token added to the front matter that is not classified into
   any tier — governance drift; the skill prompts the user to
   classify it.
+
+### Convention: paired role tokens (text-on-*, fg-on-*, etc.)
+
+Background-role tokens (status-ok, primary, surface-card) often
+need a paired foreground-role token to express the text/icon color
+that goes on top.
+
+CDD-DesignMD-Pro adopts the convention `text-on-X` for paired
+tokens (e.g., text-on-primary, text-on-status-ok, text-on-warning).
+Components express both roles explicitly:
+
+```yaml
+components:
+  badge-success:
+    backgroundColor: "{colors.status-ok}"
+    textColor: "{colors.text-on-ok}"
+```
+
+This separation is what tokenTiers exists to enforce: status-ok is
+a tier-2 semantic role (a state), text-on-ok is a tier-2 semantic
+role (paired role), and badge-success is a tier-3 component that
+combines both.
+
+Paired tokens may be collapsed when all members of a group share
+the same value — see Cross-extension rules below.
 
 ## Extension: invariants
 
@@ -590,6 +659,22 @@ checked after each extension passes its own validation:
 6. `runtime` entries whose `path` is also constrained by an
    invariant of type `value-pin` are an error — the value cannot be
    both pinned and runtime.
+7. **Domain preset attribution.** When BOOTSTRAP applies a domain
+   preset (banking, healthcare, industrial-scada), the preset's
+   `references` field is emitted as a YAML comment block above the
+   merged invariants:
+
+   ```yaml
+   # Invariants imported from preset: industrial-scada
+   # References: ANSI/ISA-101.01-2015, ANSI/ISA-18.2-2016, IEC 62682
+   invariants:
+     - id: status-color-immutable
+       ...
+   ```
+
+   This convention preserves traceability from invariants back to
+   their normative sources without inflating the YAML schema. AUDIT
+   workflows may surface these references in reports.
 
 ## Versioning
 
