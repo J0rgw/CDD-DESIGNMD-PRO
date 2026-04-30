@@ -40,7 +40,7 @@ jobs:
             for f in examples/**/*.md examples/*.md; do
               [ -f "$f" ] || continue
               echo "Validating $f"
-              bunx @google/design.md spec < "$f" || exit 1
+              bunx @google/design.md lint "$f" || exit 1
             done
           else
             echo "No examples to validate yet (skip)"
