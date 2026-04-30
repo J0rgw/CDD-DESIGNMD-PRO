@@ -136,6 +136,27 @@ With the plan confirmed, the skill assembles the DESIGN.md:
 The skill never invents brand colors or fonts the user did not
 provide; missing values stay neutral.
 
+### Auto-generated primitives
+
+BOOTSTRAP generates derived primitives automatically from user-
+provided base values, to ensure components have full state coverage
+without requiring the user to specify every variant.
+
+Auto-generated derivations:
+
+| Base token        | Auto-derived            | How               |
+| ----------------- | ----------------------- | ----------------- |
+| colors.primary    | colors.primary-hover    | darken by 8%      |
+| colors.primary    | colors.primary-active   | darken by 12%     |
+| colors.accent     | colors.accent-hover     | darken by 8%      |
+| colors.surface-*  | colors.surface-*-hover  | darken/lighten 4% |
+
+These derivations are conventions for typical hover/active state
+feedback. The user may override any of them post-generation. If
+the user's domain requires non-standard interaction states (e.g.
+industrial SCADA where hover state is suppressed), Phase 5 handoff
+flags this for review.
+
 ### Brand color contrast resolution
 
 When the user provides a brand primary or accent that fails WCAG-AA
