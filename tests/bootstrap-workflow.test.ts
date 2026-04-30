@@ -114,8 +114,8 @@ describe("bootstrap examples", () => {
     .filter((d) => d.isDirectory())
     .map((d) => resolve(EXAMPLES_DIR, d.name));
 
-  it("at least two examples exist", () => {
-    expect(exampleDirs.length).toBeGreaterThanOrEqual(2);
+  it("at least three examples exist", () => {
+    expect(exampleDirs.length).toBeGreaterThanOrEqual(3);
   });
 
   for (const dir of exampleDirs) {
@@ -177,6 +177,42 @@ describe("bootstrap examples", () => {
       const { frontMatter } = readDesignMd(designMdPath);
       expect(frontMatter).toContain("excludedFrom:");
       expect(frontMatter).toMatch(/colors\.status-/);
+    });
+  });
+
+  describe("03-runtime-feature-flag — runtime override decoupled from axes", () => {
+    const designMdPath = resolve(EXAMPLES_DIR, "03-runtime-feature-flag/expected-output/DESIGN.md");
+
+    it("does NOT include invariants (domain is none/other)", () => {
+      const { frontMatter } = readDesignMd(designMdPath);
+      expect(frontMatter).not.toMatch(/^invariants:/m);
+    });
+
+    it("declares a mode axis but no branding axis", () => {
+      const { frontMatter } = readDesignMd(designMdPath);
+      expect(frontMatter).toMatch(/^themingAxes:/m);
+      expect(frontMatter).toMatch(/^\s{2}mode:/m);
+      expect(frontMatter).not.toMatch(/^\s{2}branding:/m);
+    });
+
+    it("declares exactly one runtime entry whose path is not under any axis controls", () => {
+      const { frontMatter } = readDesignMd(designMdPath);
+      const runtimeIdx = frontMatter.search(/^runtime:\n/m);
+      expect(runtimeIdx).toBeGreaterThan(-1);
+      const afterRuntime = frontMatter.slice(runtimeIdx);
+      const nextTopKey = afterRuntime.slice(1).search(/\n[a-z][a-zA-Z]*:/);
+      const runtimeBlock = nextTopKey === -1 ? afterRuntime : afterRuntime.slice(0, nextTopKey + 1);
+      const pathLines = runtimeBlock.match(/^\s*-\s*path:/gm) ?? [];
+      expect(pathLines.length).toBe(1);
+
+      expect(runtimeBlock).toMatch(/path:\s*colors\.cta/);
+      expect(runtimeBlock).toMatch(/source:\s*feature-flag\./);
+
+      const axesIdx = frontMatter.search(/^themingAxes:\n/m);
+      const afterAxes = frontMatter.slice(axesIdx);
+      const nextAxesKey = afterAxes.slice(1).search(/\n[a-z][a-zA-Z]*:/);
+      const axesBlock = nextAxesKey === -1 ? afterAxes : afterAxes.slice(0, nextAxesKey + 1);
+      expect(axesBlock).not.toContain("colors.cta");
     });
   });
 });
