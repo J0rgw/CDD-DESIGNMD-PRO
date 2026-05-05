@@ -721,6 +721,103 @@ runtime:
 - A runtime token is referenced from a `primitive` tier — tier
   inversion combined with runtime drift.
 
+## Extension: audit
+
+### Purpose
+
+`audit` configures the AUDIT workflow's behaviour: which severities
+fail CI, which paths to skip during the scan, which rules to
+suppress, and which extra paths to include beyond the heuristic
+defaults. It is the most operationally consequential extension —
+it converts the contract into pipeline-executable behaviour.
+
+This extension is OPTIONAL. If absent, AUDIT applies documented
+defaults (`failOn: [error]`, all other lists empty). It applies
+to any project that runs AUDIT in CI or wants reproducible scope
+across local and CI runs.
+
+### YAML schema
+
+```yaml
+audit:
+  failOn: [error]
+  excludePaths:
+    - "**/*.test.tsx"
+    - "**/*.stories.tsx"
+    - "**/__mocks__/**"
+  excludeRules: []
+  additionalPaths: []
+```
+
+### Field definitions
+
+| Field             | Type       | Required | Default   | Description                                                                                       |
+| ----------------- | ---------- | -------- | --------- | ------------------------------------------------------------------------------------------------- |
+| `failOn`          | `string[]` | no       | `[error]` | Severities that cause AUDIT to exit non-zero. Subset of `error`, `warning`, `info`.               |
+| `excludePaths`    | `string[]` | no       | `[]`      | Globs (gitignore syntax) of files to exclude from the scan.                                       |
+| `excludeRules`    | `string[]` | no       | `[]`      | Ids of `antiPatterns` or `invariants` whose findings are dropped from the report.                 |
+| `additionalPaths` | `string[]` | no       | `[]`      | Globs of files to include in addition to the default heuristic scope (see `audit.md`, Phase 2).   |
+
+### Validation rules
+
+1. Every value in `failOn` is one of `error`, `warning`, `info`.
+   Duplicates are rejected.
+2. Every id in `excludeRules` resolves to an `antiPattern.id` or an
+   `invariant.id` declared in the same DESIGN.md. Unknown ids are
+   rejected (typo guard).
+3. `excludePaths` and `additionalPaths` use gitignore-style glob
+   syntax — not regex. A literal `.` is matched as a dot, `**`
+   matches across directory boundaries, leading `!` is reserved
+   for negation in future versions.
+4. If `audit` is absent, AUDIT uses the documented defaults
+   (`failOn: [error]`, every other field `[]`).
+
+### Minimal valid example
+
+```yaml
+audit:
+  failOn: [error]
+```
+
+### Full example with all fields
+
+```yaml
+audit:
+  failOn: [error, warning]
+  excludePaths:
+    - "**/*.test.tsx"
+    - "**/*.stories.tsx"
+    - "src/legacy/**"
+  excludeRules:
+    - hardcoded-color-literal
+    - inline-style-attribute
+  additionalPaths:
+    - "packages/ui-kit/src/**"
+```
+
+### Common mistakes
+
+- An `excludeRules` id that does not exist anywhere in the
+  DESIGN.md — silently suppresses nothing, but indicates a typo
+  or a removed rule.
+- `failOn: [error, error]` — duplicates are rejected; deduplicate
+  before saving.
+- Using regex syntax in `excludePaths` (`^src/legacy/`) — these
+  fields are globs, not regex.
+
+### Drift detection patterns
+
+`audit` is consumed by the AUDIT workflow itself, so it does not
+trigger codebase scans. Drift on this extension manifests as
+incorrect AUDIT behaviour:
+
+- A team relaxes `failOn` to ship a release, then forgets to
+  restore it. AUDIT silently lets warnings accumulate. Mitigation:
+  keep `failOn` under code review like any other contract change.
+- `excludeRules` grows over time as suppression of legitimate
+  findings. Mitigation: AUDIT reports include a header listing
+  active suppressions so reviewers see what is being silenced.
+
 ## Cross-extension rules
 
 These rules apply to combinations of the above extensions and are
@@ -756,6 +853,12 @@ checked after each extension passes its own validation:
    This convention preserves traceability from invariants back to
    their normative sources without inflating the YAML schema. AUDIT
    workflows may surface these references in reports.
+8. **Audit suppression coherence.** Every id listed in
+   `audit.excludeRules` MUST resolve to an `antiPatterns[].id` or
+   an `invariants[].id` declared in the same DESIGN.md. The
+   typical drift case — a rule is renamed or removed but
+   `excludeRules` still mentions it — is rejected at parse time
+   so that suppressions cannot silently outlive their target.
 
 ## Versioning
 

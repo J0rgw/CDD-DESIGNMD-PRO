@@ -219,6 +219,13 @@ runtime:
     source: user.density
     fallback: 16px
     scope: session
+audit:
+  failOn: [error]
+  excludePaths:
+    - "**/*.test.tsx"
+    - "**/*.stories.tsx"
+  excludeRules: []
+  additionalPaths: []
 ---
 
 # CDD Reference System
