@@ -541,16 +541,19 @@ antiPatterns:
 
 | Field         | Type       | Required | Description                                                          |
 | ------------- | ---------- | -------- | -------------------------------------------------------------------- |
-| `type`        | `string`   | yes      | `regex` or `pattern` (declarative).                                  |
-| `pattern`     | `string`   | yes      | The regex source or pattern body.                                    |
+| `type`        | `string`   | yes      | Currently only `regex`. Declarative pattern matching is deferred to v0.2+ alongside AST migration. |
+| `pattern`     | `string`   | yes      | ECMAScript regex source (without delimiters).                        |
 | `paths`       | `string[]` | no       | Glob(s) of files to scan. Defaults to all source files.              |
 | `excludePaths`| `string[]` | no       | Globs to exclude from the scan.                                      |
 
 ### Validation rules
 
 1. `severity` is one of `error`, `warning`, `info`.
-2. `detect.type` is `regex` or `pattern`. If `regex`, `pattern` must
-   compile under JavaScript regex semantics.
+2. `detect.type` is `regex` (the only supported value in v0.1.x). The
+   `pattern` field must compile under JavaScript regex semantics.
+   Declarative pattern matching is reserved for v0.2+ once AST-based
+   detection lands; any other value than `regex` is rejected at
+   parse time.
 3. `id` is unique across the `antiPatterns` list.
 4. Every anti-pattern has a non-empty `remediation`.
 5. `paths` and `excludePaths` are valid globs (no naked path
