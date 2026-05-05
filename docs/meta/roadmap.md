@@ -31,6 +31,18 @@ AUDIT shipping with that dependency anyway.
 Tracking: see `skill-workflows/audit/sarif-schema.md` and
 `tests/audit-workflow.test.ts`.
 
+### Verify path matcher implementation
+
+The "Path syntax" section in `templates/extension-schema.md` cites
+picomatch as the reference implementation. When AUDIT ships as
+runtime code, verify that the actual matcher used (picomatch,
+micromatch, fast-glob, minimatch, or other) matches the documented
+syntax — including brace expansion, leading `!` negation, and the
+ban on naked `..` traversal. Update either the documentation or
+the implementation to align.
+
+Origin: mini-task 4.5 review hallazgo H5.
+
 ### Declarative pattern matching for antiPatterns
 
 Reintroduce `detect.type: pattern` (declarative, AST-aware) once
