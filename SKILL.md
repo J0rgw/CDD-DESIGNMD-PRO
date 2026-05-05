@@ -43,7 +43,7 @@ description: |
 
 Extension of Google's DESIGN.md (alpha) for frontend systems whose
 constraints exceed the upstream core. Backward compatible: every artifact
-this skill emits remains a valid DESIGN.md per `@google/design.md spec`.
+this skill emits remains a valid DESIGN.md per `@google/design.md lint`.
 
 ## Extensions over upstream
 
@@ -71,7 +71,7 @@ Goal: produce an initial DESIGN.md by interviewing the user.
   1. Detect existing assets in the working dir (tokens, themes, configs).
   2. Run a structured interview covering: brands, themes, density modes,
      domain invariants, runtime needs.
-  3. Draft the DESIGN.md, validate it against `@google/design.md spec`,
+  3. Draft the DESIGN.md, validate it against `@google/design.md lint`,
      iterate until clean.
   4. Place at the repo root unless the user specifies otherwise.
 - **Output (canonical):**
@@ -87,7 +87,7 @@ Goal: report every place the codebase contradicts the DESIGN.md.
   - a `DESIGN.md` (required) at repo root or explicit path
   - optional `--paths` to scope the scan
 - **Process:**
-  1. Parse and validate the DESIGN.md (must pass upstream `spec`).
+  1. Parse and validate the DESIGN.md (must pass upstream `lint`).
   2. Build the contract: tokens, axes, invariants, anti-patterns.
   3. Scan source for: hardcoded literals where tokens are required,
      mode-specific styles outside the declared axes, runtime-token
