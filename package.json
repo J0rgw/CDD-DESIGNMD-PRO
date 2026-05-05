@@ -1,6 +1,6 @@
 {
   "name": "cdd-designmd-pro",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Claude Code skill that extends Google's DESIGN.md with theming axes, token tiers, invariants, anti-patterns, and runtime declarations. Provides BOOTSTRAP, AUDIT, and REFACTOR capabilities for frontend codebases.",
   "type": "module",
   "license": "Apache-2.0",

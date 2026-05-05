@@ -1,6 +1,6 @@
 ---
 name: cdd-designmd-pro
-version: 0.1.0
+version: 0.2.0
 specCompatibility:
   designmd: "0.1.x"
 license: Apache-2.0
@@ -148,6 +148,6 @@ Goal: bring code into conformance with the DESIGN.md contract.
 
 ## Versioning
 
-- This skill: SemVer, currently `0.1.0`.
+- This skill: SemVer, currently `0.2.0`.
 - Tracks `@google/design.md` `alpha` (currently `0.1.x`); supported
   upstream range is declared in `package.json#designmd.supportedVersion`.

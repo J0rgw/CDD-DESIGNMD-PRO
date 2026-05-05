@@ -932,7 +932,7 @@ checked after each extension passes its own validation:
 ## Versioning
 
 The extension schema follows its own SemVer, kept in lockstep with
-the skill's `package.json` version (currently `0.1.0`). Breaking
+the skill's `package.json` version (currently `0.2.0`). Breaking
 changes to any extension shape require a MINOR bump pre-1.0 and are
 listed in `CHANGELOG.md` (when introduced) under a "Breaking changes"
 section. The mapping between skill version and supported extension
