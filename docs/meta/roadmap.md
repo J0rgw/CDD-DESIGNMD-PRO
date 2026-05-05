@@ -131,6 +131,21 @@ the rename is worth the friction.
 
 Origin: mini-task 4.6 review hallazgo H#9.4.
 
+### Re-sync audit examples with industrial-scada preset
+
+After mini-task 4.7 re-synced
+`examples/bootstrap/02-brownfield-with-tokens/` with the
+`industrial-scada` preset, the audit examples (especially
+`examples/audit/03-invariant-violation/`) still declare
+invariants inline with values that match the pre-4.7 state.
+They lint clean and tests pass, but conceptually they should
+track the preset.
+
+Action deferred until v0.3+ when the `type` taxonomy exists
+and we revisit invariant authoring across all examples.
+
+Origin: mini-task 4.7 hallazgos H1 + H3.
+
 ## Open questions
 
 These are unresolved design decisions awaiting more user data
