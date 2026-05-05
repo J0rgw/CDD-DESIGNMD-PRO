@@ -543,8 +543,8 @@ antiPatterns:
 | ------------- | ---------- | -------- | -------------------------------------------------------------------- |
 | `type`        | `string`   | yes      | Currently only `regex`. Declarative pattern matching is deferred to v0.2+ alongside AST migration. |
 | `pattern`     | `string`   | yes      | ECMAScript regex source (without delimiters).                        |
-| `paths`       | `string[]` | no       | Glob(s) of files to scan. Defaults to all source files.              |
-| `excludePaths`| `string[]` | no       | Globs to exclude from the scan.                                      |
+| `paths`       | `string[]` | no       | Glob(s) of files to scan; see [Path syntax](#path-syntax). Defaults to all source files. |
+| `excludePaths`| `string[]` | no       | Globs to exclude from the scan; see [Path syntax](#path-syntax).     |
 
 ### Validation rules
 
@@ -556,8 +556,9 @@ antiPatterns:
    parse time.
 3. `id` is unique across the `antiPatterns` list.
 4. Every anti-pattern has a non-empty `remediation`.
-5. `paths` and `excludePaths` are valid globs (no naked path
-   traversal like `..`).
+5. `paths` and `excludePaths` follow the unified glob syntax (see
+   [Path syntax](#path-syntax)). Naked path traversal (`..`) is
+   rejected at parse time.
 
 ### Minimal valid example
 
@@ -795,9 +796,9 @@ audit:
 | Field             | Type       | Required | Default   | Description                                                                                       |
 | ----------------- | ---------- | -------- | --------- | ------------------------------------------------------------------------------------------------- |
 | `failOn`          | `string[]` | no       | `[error]` | Severities that cause AUDIT to exit non-zero. Subset of `error`, `warning`, `info`.               |
-| `excludePaths`    | `string[]` | no       | `[]`      | Globs (gitignore syntax) of files to exclude from the scan.                                       |
+| `excludePaths`    | `string[]` | no       | `[]`      | Globs of files to exclude from the scan; see [Path syntax](#path-syntax).                          |
 | `excludeRules`    | `string[]` | no       | `[]`      | Ids of `antiPatterns` or `invariants` whose findings are dropped from the report.                 |
-| `additionalPaths` | `string[]` | no       | `[]`      | Globs of files to include in addition to the default heuristic scope (see `audit.md`, Phase 2).   |
+| `additionalPaths` | `string[]` | no       | `[]`      | Globs of files to include in addition to the default heuristic scope (see `audit.md`, Phase 2); see [Path syntax](#path-syntax). |
 
 ### Validation rules
 
@@ -806,10 +807,9 @@ audit:
 2. Every id in `excludeRules` resolves to an `antiPattern.id` or an
    `invariant.id` declared in the same DESIGN.md. Unknown ids are
    rejected (typo guard).
-3. `excludePaths` and `additionalPaths` use gitignore-style glob
-   syntax — not regex. A literal `.` is matched as a dot, `**`
-   matches across directory boundaries, leading `!` is reserved
-   for negation in future versions.
+3. `excludePaths` and `additionalPaths` follow the unified glob
+   syntax described in [Path syntax](#path-syntax) (not regex,
+   not gitignore-only — explicit brace expansion is supported).
 4. If `audit` is absent, AUDIT uses the documented defaults
    (`failOn: [error]`, every other field `[]`).
 
@@ -858,6 +858,34 @@ incorrect AUDIT behaviour:
 - `excludeRules` grows over time as suppression of legitimate
   findings. Mitigation: AUDIT reports include a header listing
   active suppressions so reviewers see what is being silenced.
+
+## Path syntax
+
+Path fields across extensions (`audit.excludePaths`,
+`audit.additionalPaths`, `antiPatterns.detect.paths`,
+`antiPatterns.detect.excludePaths`) use a unified glob syntax. The
+supported features are:
+
+| Syntax    | Example              | Meaning                                       |
+| --------- | -------------------- | --------------------------------------------- |
+| `*`       | `*.tsx`              | match any non-slash characters                |
+| `**`      | `src/**/*.tsx`       | match any depth including zero                |
+| `?`       | `?.tsx`              | match a single non-slash character            |
+| `[...]`   | `[ab].tsx`           | match a character set                         |
+| `{a,b,c}` | `*.{ts,tsx,js,jsx}`  | brace expansion (alternation)                 |
+| `!path`   | `!**/*.test.tsx`     | negation, only valid as the prefix of a glob  |
+
+Implementation reference: based on the `picomatch` library (the
+de-facto standard in the Node ecosystem). Compatible with
+`.gitignore` semantics for the most common cases, with the explicit
+addition of brace expansion. Unlike vanilla `.gitignore`, brace
+expansion is always supported because it is the dominant idiom in
+the existing examples.
+
+Trailing slashes are normalized away. A leading `./` is normalized
+away. Absolute paths are not supported — every path is interpreted
+relative to the project root. Naked path traversal (`..`) is
+rejected at parse time.
 
 ## Cross-extension rules
 
