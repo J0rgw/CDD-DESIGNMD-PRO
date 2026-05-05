@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "cdd-designmd-pro",
+          "version": "0.1.0",
+          "informationUri": "https://github.com/J0rgw/CDD-DESIGNMD-PRO"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "status-color-immutable",
+          "level": "error",
+          "message": {
+            "text": "Redeclaration of --status-critical violates the status-color-immutable invariant. Status colors encode operational meaning (ISA-101) and are not customizable per tenant."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/styles/theme-override.css" },
+                "region": {
+                  "startLine": 9,
+                  "startColumn": 3,
+                  "snippet": {
+                    "text": "  --status-critical: #C62828;\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/styles/theme-override.css" },
+                "region": {
+                  "startLine": 9,
+                  "startColumn": 22,
+                  "snippet": {
+                    "text": "  --status-critical: #C62828;\n"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "cdd-designmd-pro",
+          "version": "0.1.0",
+          "informationUri": "https://github.com/J0rgw/CDD-DESIGNMD-PRO"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/components/Banner.tsx" },
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 23,
+                  "snippet": {
+                    "text": "      style={{ background: \"#FEF3C7\", color: \"#78350F\" }}\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "inline-style-attribute",
+          "level": "warning",
+          "message": {
+            "text": "JSX style attribute carries a hardcoded color. Move color into the stylesheet and reference a semantic token."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/components/Banner.tsx" },
+                "region": {
+                  "startLine": 7,
+                  "startColumn": 7,
+                  "snippet": {
+                    "text": "      style={{ background: \"#FEF3C7\", color: \"#78350F\" }}\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/components/Badge.module.css" },
+                "region": {
+                  "startLine": 3,
+                  "startColumn": 10,
+                  "snippet": {
+                    "text": "  color: #0F172A;\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "tier-inversion-soft",
+          "level": "warning",
+          "message": {
+            "text": "Component reads primitive token colors.gray-50 directly. A semantic token (colors.surface) covers the same intent; route through it instead."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/components/Badge.module.css" },
+                "region": {
+                  "startLine": 2,
+                  "startColumn": 21,
+                  "snippet": {
+                    "text": "  background-color: var(--colors-gray-50);\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "orphan-token",
+          "level": "note",
+          "message": {
+            "text": "Component caption is declared in DESIGN.md but no source file in scope references it."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "DESIGN.md" },
+                "region": {
+                  "startLine": 49,
+                  "startColumn": 3,
+                  "snippet": {
+                    "text": "  caption:\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "orphan-token",
+          "level": "note",
+          "message": {
+            "text": "Token colors.text-muted is declared in DESIGN.md but its only consumer is the orphan components.caption. Effectively dead."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "DESIGN.md" },
+                "region": {
+                  "startLine": 18,
+                  "startColumn": 3,
+                  "snippet": {
+                    "text": "  text-muted: \"{colors.gray-700}\"\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "orphan-token",
+          "level": "note",
+          "message": {
+            "text": "Token spacing.xs is declared in DESIGN.md but never referenced inside the configured scope."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "DESIGN.md" },
+                "region": {
+                  "startLine": 38,
+                  "startColumn": 3,
+                  "snippet": {
+                    "text": "  xs: 4px\n"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

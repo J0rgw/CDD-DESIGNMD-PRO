@@ -175,5 +175,3 @@ one warning, and one note:
   ]
 }
 ```
-</content>
-</invoke>

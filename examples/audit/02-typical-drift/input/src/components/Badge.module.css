@@ -1,0 +1,8 @@
+.badge {
+  background-color: var(--colors-gray-50);
+  color: #0F172A;
+  border-radius: var(--rounded-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+</content>
+</invoke>

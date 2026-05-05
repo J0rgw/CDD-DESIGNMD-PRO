@@ -305,5 +305,3 @@ AUDIT computes its exit code from the final finding set:
   emits no `runtime-bypass` findings for that provider. Document
   this in the report header so the reviewer knows runtime audit
   was skipped for unknown providers.
-</content>
-</invoke>
