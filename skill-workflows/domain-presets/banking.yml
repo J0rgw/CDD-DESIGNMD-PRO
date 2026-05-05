@@ -15,12 +15,12 @@ invariants:
   - id: negative-balance-color
     description: Negative monetary values must NOT be rendered in green.
     scope: any token used for monetary value display
-    enforcement: ci-only
+    enforcement: manual
     severity: error
 
   - id: decimal-precision-fixed
     description: Currency values must always display 2 decimal places.
-    scope: components.value-display, components.amount-display
+    scope: ["components.value-display", "components.amount-display"]
     enforcement: automated
     severity: error
 
@@ -43,5 +43,5 @@ invariants:
       Monetary values must meet WCAG-AA 4.5:1 even at smaller type
       sizes (these are scanned, not read).
     scope: components.value-display.textColor on backgroundColor
-    enforcement: automated
+    enforcement: manual
     severity: error

@@ -15,8 +15,8 @@ const SEVERITY_VALUES = new Set(["error", "warning", "info"]);
 interface PresetInvariant {
   id: string;
   description: string;
-  scope: string;
-  enforcement: string;
+  scope: string | string[];
+  enforcement: "manual" | "automated" | "ci-only";
   severity: string;
 }
 
@@ -95,9 +95,22 @@ describe("domain presets", () => {
           expect(inv.id).toMatch(/^[a-z0-9-]+$/);
           expect(typeof inv.description).toBe("string");
           expect(inv.description.length).toBeGreaterThan(0);
-          expect(typeof inv.scope).toBe("string");
           expect(ENFORCEMENT_VALUES.has(inv.enforcement)).toBe(true);
           expect(SEVERITY_VALUES.has(inv.severity)).toBe(true);
+
+          if (inv.enforcement === "automated" || inv.enforcement === "ci-only") {
+            expect(Array.isArray(inv.scope)).toBe(true);
+            expect(Array.isArray(inv.scope) && inv.scope.length > 0).toBe(true);
+            for (const path of inv.scope as string[]) {
+              expect(typeof path).toBe("string");
+              expect(path.length).toBeGreaterThan(0);
+            }
+          } else {
+            const scopeOk =
+              (typeof inv.scope === "string" && inv.scope.length > 0) ||
+              (Array.isArray(inv.scope) && inv.scope.length > 0);
+            expect(scopeOk).toBe(true);
+          }
         }
       });
 

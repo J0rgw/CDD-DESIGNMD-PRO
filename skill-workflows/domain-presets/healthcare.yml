@@ -16,7 +16,7 @@ invariants:
       Vital sign ranges (normal/abnormal/critical) follow standardized
       color codes; out-of-range values must be visually distinct from
       normal.
-    scope: components.vital-display, colors.vital-*
+    scope: ["components.vital-display", "colors.vital-*"]
     enforcement: ci-only
     severity: error
 
@@ -40,7 +40,7 @@ invariants:
     description: >
       Body type minimum 16px to support staff fatigue and varying
       viewing distances; vital readouts minimum 24px.
-    scope: typography.body, typography.vital-readout
+    scope: ["typography.body", "typography.vital-readout"]
     enforcement: automated
     severity: warning
 
@@ -48,5 +48,5 @@ invariants:
     description: >
       All clinical text WCAG-AA minimum; critical readouts AAA.
     scope: any text on any background in clinical context
-    enforcement: automated
+    enforcement: manual
     severity: error

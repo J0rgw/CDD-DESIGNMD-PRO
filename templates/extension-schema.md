@@ -416,18 +416,60 @@ invariants:
 | -------------- | ---------- | -------- | ---------------------------------------------------------------------------------------- |
 | `id`           | `string`   | yes      | Unique kebab-case identifier. Stable across versions.                                    |
 | `description`  | `string`   | yes      | Human-readable rationale. Appears in AUDIT findings.                                     |
-| `scope`        | `string` or `string[]` | yes | Token paths the invariant constrains. May be specific paths or `colors.*` wildcards. A bare string is normalized to a single-element array during processing; the canonical emitted form is always an array. This permits ergonomic YAML authoring while ensuring downstream consumers see a uniform type. |
+| `scope`        | `string` or `string[]` | yes | Token paths the invariant constrains, or — when `enforcement: manual` — a descriptive string explaining the conceptual scope. See "Scope semantics" below. |
 | `enforcement`  | `string`   | yes      | One of `manual`, `automated`, `ci-only`.                                                 |
 | `type`         | `string`   | no       | Invariant family: `contrast-min`, `color-floor`, `no-mutation`, `value-pin`, `custom`.   |
 | `parameters`   | `object`   | no       | Type-specific arguments (e.g. `ratio` for `contrast-min`).                               |
 
+### Scope semantics
+
+The `scope` field has two valid forms, selected by the invariant's
+`enforcement` mode. The split exists because automated detectors
+need machine-resolvable paths, while manual-review invariants
+often constrain conceptual surfaces (e.g. "any monetary display")
+that resist precise path enumeration.
+
+**For `enforcement: automated` and `enforcement: ci-only`**
+
+`scope` MUST be an array of glob patterns the AUDIT detector can
+resolve to file or token-path matches. Each pattern follows the
+unified glob syntax (see [Path syntax](#path-syntax)).
+
+```yaml
+- id: status-color-immutable
+  scope: ["colors.status-*", "components.alarm-*"]
+  enforcement: ci-only
+```
+
+**For `enforcement: manual`**
+
+`scope` MAY be either:
+
+- An array of glob patterns (preferred when the surface is
+  path-bound and machine-resolvable), OR
+- A descriptive string explaining the scope in human terms (used
+  when the scope is conceptual rather than path-bound).
+
+```yaml
+- id: destructive-confirmation
+  scope: "Components that move money or close accounts."
+  enforcement: manual
+```
+
 ### Validation rules
 
 1. `id` is unique across the `invariants` list.
-2. **Scope normalization.** If `scope` is provided as a bare string,
-   it is normalized to `[string]` before validation. All other
-   validation rules apply to the normalized array form.
-3. `scope` paths exist in the front matter (or resolve via wildcard).
+2. **Scope shape depends on `enforcement`.**
+   - For `enforcement: automated` or `enforcement: ci-only`:
+     `scope` MUST be an array; each element MUST be a non-empty
+     string conforming to the unified glob syntax; empty arrays
+     are rejected.
+   - For `enforcement: manual`: `scope` MAY be a string
+     (descriptive) OR an array (technical). If an array, the
+     same constraints as above apply. If a string, it MUST be
+     non-empty.
+3. `scope` paths (when array) exist in the front matter or
+   resolve via wildcard.
 4. `enforcement` is one of the three enumerated values.
 5. If `type` is set, `parameters` must satisfy the type's contract:
    - `contrast-min` requires `ratio: number > 1`.

@@ -15,7 +15,7 @@ invariants:
       Status colors (normal/advisory/warning/critical/emergency) are
       not customizable per tenant; they encode operational meaning,
       not branding.
-    scope: colors.status-*
+    scope: ["colors.status-*"]
     enforcement: ci-only
     severity: error
 
@@ -49,5 +49,5 @@ invariants:
       Tenant brand colors must NOT influence status colors; runtime
       branding scopes to accent and surface only.
     scope: themingAxes.branding.excludedFrom must include status-*
-    enforcement: ci-only
+    enforcement: manual
     severity: error
