@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `## Path syntax` section to the schema, documenting the unified
   glob syntax (with explicit brace expansion) used by all path
   fields.
-- `docs/roadmap.md` tracking deferred items and future capabilities.
+- `docs/meta/roadmap.md` tracking deferred items and future capabilities.
 
 ### Changed
 
