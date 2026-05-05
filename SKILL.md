@@ -149,5 +149,13 @@ Goal: bring code into conformance with the DESIGN.md contract.
 ## Versioning
 
 - This skill: SemVer, currently `0.2.0`.
-- Tracks `@google/design.md` `alpha` (currently `0.1.x`); supported
-  upstream range is declared in `package.json#designmd.supportedVersion`.
+- Tracks `@google/design.md` `alpha`. Compatibility metadata lives
+  in `package.json` under the `designmd` key:
+  - `extends`: declares the upstream package this skill extends
+    (currently `"@google/design.md"`).
+  - `supportedSpec`: the upstream spec channel this skill targets
+    (currently `"alpha"`).
+  - `supportedVersion`: the SemVer range of the upstream package
+    this skill is tested against (currently `"0.1.x"`).
+- Tools that read this metadata can verify compatibility before
+  invoking the skill against a given upstream version.
