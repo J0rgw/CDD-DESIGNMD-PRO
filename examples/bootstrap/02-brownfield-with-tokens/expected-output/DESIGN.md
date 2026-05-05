@@ -207,36 +207,37 @@ invariants:
       Status colors (normal/advisory/warning/critical/emergency) are
       not customizable per tenant; they encode operational meaning,
       not branding.
-    scope: colors.status-*
+    scope: ["colors.status-*"]
     enforcement: ci-only
     severity: error
   - id: redundant-encoding
     description: >
-      Each status communicated by AT LEAST color + symbol/shape.
-      Color alone is insufficient.
-    scope: components.status-indicator-*
+      Each status communicated by AT LEAST color + symbol/shape. Color
+      alone is insufficient (color blindness, monochrome secondary
+      displays).
+    scope: components.status-indicator, components.alarm-*
     enforcement: manual
     severity: error
   - id: calm-default-state
     description: >
-      Normal/operational state is visually muted; saturation reserved
-      for abnormal states.
-    scope: colors.surface, colors.surface-strong, colors.text in nominal state
+      Normal/operational state is visually muted; saturation and color
+      intensity reserved for abnormal states.
+    scope: colors.surface-*, colors.text-* in nominal state
     enforcement: manual
     severity: warning
   - id: alarm-priority-distinguishable
     description: >
-      ISA-18.2 priority levels must be perceptually distinguishable,
-      not just labeled.
-    scope: components.status-indicator-*
+      ISA-18.2 priority levels (low/medium/high/critical/emergency)
+      must be perceptually distinguishable, not just labeled.
+    scope: components.alarm-*
     enforcement: manual
     severity: error
   - id: branding-excluded-from-status
     description: >
-      Customer brand colors must NOT influence status colors; runtime
-      branding scopes to accent only.
+      Tenant brand colors must NOT influence status colors; runtime
+      branding scopes to accent and surface only.
     scope: themingAxes.branding.excludedFrom must include status-*
-    enforcement: ci-only
+    enforcement: manual
     severity: error
 antiPatterns:
   - id: hardcoded-hex

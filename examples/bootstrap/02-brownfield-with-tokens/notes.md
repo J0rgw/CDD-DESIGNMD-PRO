@@ -49,3 +49,21 @@ The test asserts:
 4. `themingAxes.branding.excludedFrom` lists every `colors.status-*`
    token (the `branding-excluded-from-status` invariant is
    structurally satisfied, not just documented).
+
+## Invariants from industrial-scada preset
+
+This example imports the `industrial-scada` preset. As of v0.2.x,
+preset invariants ship with `enforcement: manual` for every entry
+whose scope is conceptual rather than path-bound, because the
+AUDIT runtime detector that would handle `automated` and `ci-only`
+enforcement is deferred to v0.3+ (see `docs/meta/roadmap.md`).
+
+Adopters who want stricter enforcement in their own DESIGN.md can
+override enforcement values per invariant — but doing so before
+the detector exists means those invariants will be treated as
+manual at audit time anyway.
+
+This example tracks the preset as-is to preserve fidelity between
+the canonical preset and the canonical example. If the preset
+changes (e.g., a future session adds `type` to one of the
+invariants), the example moves with it.
