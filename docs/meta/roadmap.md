@@ -31,6 +31,20 @@ AUDIT shipping with that dependency anyway.
 Tracking: see `skill-workflows/audit/sarif-schema.md` and
 `tests/audit-workflow.test.ts`.
 
+### Enrich domain presets with `type` taxonomy
+
+Once AUDIT runtime detection lands, revisit each of the 15
+invariants across the `banking`, `healthcare`, and
+`industrial-scada` presets. Assign appropriate `type`
+(`contrast-min`, `color-floor`, `no-mutation`, `value-pin`, or
+`custom` with explicit detector) and `parameters` per the schema
+definition.
+
+Until this lands, preset invariants are effectively
+`enforcement: manual` regardless of declared enforcement.
+
+Origin: mini-task 4.6 review hallazgo H#9.1.
+
 ### Verify path matcher implementation
 
 The "Path syntax" section in `templates/extension-schema.md` cites

@@ -536,6 +536,40 @@ invariants:
   literal value is flagged.
 - `custom`: the `detect` rule is applied as written.
 
+### Status of `type` in v0.2.x presets
+
+The schema defines `type` values (`contrast-min`, `color-floor`,
+`no-mutation`, `value-pin`, `custom`) with their associated
+`parameters` shapes. However, the v0.2.x domain presets shipped
+with this skill (`banking`, `healthcare`, `industrial-scada`) do
+NOT use `type` — all 15 of their invariants are effectively
+`type: custom` with descriptive scope.
+
+Reasoning:
+
+- The taxonomy was designed before the AUDIT detector was
+  implemented as runtime code.
+- Validating type semantics requires real detector behavior,
+  which is deferred to v0.3+.
+- Shipping presets with un-validated types would risk locking in
+  semantics that need revision once the detector exists.
+
+Implication for adopters:
+
+- In v0.2.x, all preset invariants are effectively `manual`
+  enforcement once AUDIT runs (since untyped invariants cannot be
+  machine-resolved).
+- `enforcement: ci-only` and `enforcement: automated` in presets
+  are forward-looking — they declare intent for v0.3+ when typed
+  detection lands.
+- Users who want machine-enforced invariants in their own
+  DESIGN.md SHOULD add `type` to their custom invariants and
+  treat the v0.2 presets as reference templates, not drop-in
+  production rules.
+
+This limitation is tracked in `docs/meta/roadmap.md` under v0.3
+("Enrich domain presets with `type` taxonomy").
+
 ## Extension: antiPatterns
 
 ### Purpose
