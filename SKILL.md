@@ -54,6 +54,7 @@ this skill emits remains a valid DESIGN.md per `@google/design.md spec`.
 | `invariants`   | Non-negotiable rules (ISA-101, WCAG floors, brand law).              |
 | `antiPatterns` | Formal catalog of violations with detection + remediation hints.     |
 | `runtime`      | Tokens injected at runtime (theme switcher, tenant skin, telemetry). |
+| `audit`        | AUDIT workflow configuration (failOn thresholds, scope overrides).   |
 
 ## Capabilities
 
@@ -95,17 +96,25 @@ Goal: report every place the codebase contradicts the DESIGN.md.
      Invariant violations are always `error`. Anti-patterns default to
      `warning` unless the DESIGN.md elevates them. Drift defaults to
      `info` unless the token is marked critical.
-- **Output (canonical):** `audit-report.md`
-  ```
-  ## Findings
-  ### [severity] [rule-id] — short title
-  - file: path/to/file.tsx:line
-  - excerpt: ...
-  - rule: link to DESIGN.md section
-  - suggested fix: ...
-  ```
-  plus a JSON sidecar `audit-report.json` for tooling.
+- **Output (canonical):**
+  - `audit-report.md` — human-readable report grouped by severity
+    (error / warning / info), with file:line headers, code
+    excerpts, and remediation hints.
+  - `audit-report.sarif.json` — SARIF 2.1.0 subset suitable for
+    GitHub PR Annotations, IDE plugins, and programmatic
+    post-processing. The exact subset emitted is documented in
+    `skill-workflows/audit/sarif-schema.md`.
+
   AUDIT is read-only — it never edits code.
+
+- **Exit codes:**
+  - `0` — no finding has a severity in `audit.failOn` (default
+    `[error]`).
+  - `1` — at least one finding has a severity in `audit.failOn`.
+  - `2` — configuration error: invalid DESIGN.md, cross-extension
+    rule violation, or unreadable scope. Distinct from `1` so CI
+    scripts can branch on contract failure vs. finding-driven
+    failure.
 
 ### 3. REFACTOR
 
