@@ -416,7 +416,7 @@ invariants:
 | -------------- | ---------- | -------- | ---------------------------------------------------------------------------------------- |
 | `id`           | `string`   | yes      | Unique kebab-case identifier. Stable across versions.                                    |
 | `description`  | `string`   | yes      | Human-readable rationale. Appears in AUDIT findings.                                     |
-| `scope`        | `string[]` | yes      | Token paths the invariant constrains. May be specific paths or `colors.*` wildcards.     |
+| `scope`        | `string` or `string[]` | yes | Token paths the invariant constrains. May be specific paths or `colors.*` wildcards. A bare string is normalized to a single-element array during processing; the canonical emitted form is always an array. This permits ergonomic YAML authoring while ensuring downstream consumers see a uniform type. |
 | `enforcement`  | `string`   | yes      | One of `manual`, `automated`, `ci-only`.                                                 |
 | `type`         | `string`   | no       | Invariant family: `contrast-min`, `color-floor`, `no-mutation`, `value-pin`, `custom`.   |
 | `parameters`   | `object`   | no       | Type-specific arguments (e.g. `ratio` for `contrast-min`).                               |
@@ -424,15 +424,18 @@ invariants:
 ### Validation rules
 
 1. `id` is unique across the `invariants` list.
-2. `scope` paths exist in the front matter (or resolve via wildcard).
-3. `enforcement` is one of the three enumerated values.
-4. If `type` is set, `parameters` must satisfy the type's contract:
+2. **Scope normalization.** If `scope` is provided as a bare string,
+   it is normalized to `[string]` before validation. All other
+   validation rules apply to the normalized array form.
+3. `scope` paths exist in the front matter (or resolve via wildcard).
+4. `enforcement` is one of the three enumerated values.
+5. If `type` is set, `parameters` must satisfy the type's contract:
    - `contrast-min` requires `ratio: number > 1`.
    - `color-floor` requires `palette: string[]` listing forbidden hues
      (or accepts a built-in catalog when omitted, e.g. ISA-101).
    - `no-mutation` takes no parameters.
    - `value-pin` requires `value: <literal>`.
-5. An invariant of type `custom` must include a `detect` field
+6. An invariant of type `custom` must include a `detect` field
    describing how the skill matches violations.
 
 ### Minimal valid example
@@ -649,9 +652,44 @@ runtime:
 ### Validation rules
 
 1. `path` resolves to a token defined in the front matter.
-2. `fallback` is a literal value of the type matching the token at
-   `path` (a hex color for `colors.*`, a dimension or number for
-   `spacing.*`, etc.).
+2. **`fallback` is literal-only.** It must be a literal value of the
+   type matching the token at `path` (a hex color for `colors.*`, a
+   dimension or number for `spacing.*`, etc.). Token references such
+   as `{colors.primary-default}` are rejected.
+
+   Rationale: the fallback is the safety net when runtime injection
+   fails. If that safety net itself references another runtime
+   token, two points of failure are coupled and a single broken
+   provider can take both down. Literal fallbacks ensure that when
+   the runtime layer is entirely unavailable, every consumer still
+   resolves to a valid, hard-coded value.
+
+   Examples:
+
+   ✅ Valid:
+
+   ```yaml
+   runtime:
+     - path: colors.primary
+       source: tenant.brand
+       fallback: "#2563EB"      # literal hex
+   ```
+
+   ❌ Invalid:
+
+   ```yaml
+   runtime:
+     - path: colors.primary
+       source: tenant.brand
+       fallback: "{colors.primary-default}"   # token reference rejected
+   ```
+
+   When the fallback would naturally be the default value of the
+   same token (e.g., the brand primary before tenant override),
+   DUPLICATE the value as a literal in the runtime entry. Yes, this
+   couples the two declarations — that coupling is intentional and
+   verifiable: a future schema check can warn if the literal drifts
+   from the source-of-truth token's value.
 3. `source` is non-empty and follows the `<provider>.<key>` convention
    (warning, not error, if it does not).
 4. If `scope` is provided it is one of the enumerated values.
