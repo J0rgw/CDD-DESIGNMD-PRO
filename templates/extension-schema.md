@@ -655,10 +655,25 @@ runtime:
 3. `source` is non-empty and follows the `<provider>.<key>` convention
    (warning, not error, if it does not).
 4. If `scope` is provided it is one of the enumerated values.
-5. A token marked under `runtime` must also be the target of an
-   axis with `runtime: true` in `themingAxes`, OR it must not appear
-   in any axis at all (a runtime token with no axis is an
-   independent runtime override).
+5. **Source-axis coherence.** Each runtime entry's `path` falls
+   into exactly one of three categories:
+
+   1. **Axis-bound.** `path` is listed under
+      `themingAxes.<axis>.controls` AND that axis declares
+      `runtime: true`. The runtime entry materializes the axis at
+      a specific token; its `source` MUST match the axis's
+      `source` (cross-extension rule 1).
+   2. **Standalone.** `path` is not listed under any axis's
+      `controls`. The token is a per-token, ad-hoc runtime
+      override decoupled from any system-wide axis (e.g., a
+      feature-flag-driven CTA color override). Allowed.
+   3. **Disallowed.** `path` is listed under
+      `themingAxes.<axis>.controls` of a non-runtime axis (an axis
+      without `runtime: true`). This is an error: the axis claims
+      the token at build time and runtime claims it at request
+      time, producing ambiguous resolution. Either flip the axis
+      to `runtime: true` or remove `path` from the axis's
+      `controls`.
 
 ### Minimal valid example
 

@@ -16,8 +16,12 @@
 
 - **Q1 Domain.** `none/other`. The product is generic B2B SaaS
   collaboration tooling.
-- **Q2 Theme axes.** `mode + branding`. No density axis: a single
-  spacing system is acceptable. Aesthetic axis not needed: one look.
+- **Q2a Mode axis.** `both`. The product ships light and dark
+  (web default in 2026; `next-themes` already on the dependency
+  list).
+- **Q2b Other axes.** `branding`. Runtime per-tenant accent. No
+  density axis: a single spacing system is acceptable. Aesthetic
+  axis not needed: one look.
 - **Q3 Tier needs.** Yes — explicit primitive / semantic / component
   tiers. The team wants to onboard new devs without ambiguity.
 - **Q4 Runtime.** Yes. Tenant accent color is injected per request.

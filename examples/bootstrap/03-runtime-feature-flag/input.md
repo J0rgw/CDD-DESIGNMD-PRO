@@ -16,8 +16,10 @@
 
 - **Q1 Domain.** `none/other`. Generic B2B SaaS with no normative
   visual language.
-- **Q2 Theme axes.** `mode-only`. Single brand, no per-tenant
-  branding, no density variants.
+- **Q2a Mode axis.** `both`. Web default in 2026; existing `dark:`
+  Tailwind variants in 6 files.
+- **Q2b Other axes.** `none`. Single brand, no per-tenant branding,
+  no density variants, no aesthetic axis.
 - **Q3 Tier needs.** Standard 3-tier (primitive / semantic /
   component).
 - **Q4 Runtime.** Yes — but NOT for branding or theming. The team

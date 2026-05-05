@@ -71,14 +71,15 @@ can correct misdetections.
 
 ## Phase 2 — Structured interview
 
-The skill asks at most eight questions in a single block. Questions
+The skill asks at most nine questions in a single block. Questions
 are skipped or pre-filled when Phase 1 signals make the answer
 obvious.
 
 | #   | Question                                                                                                                                         | Asked when                          | Maps to                                                                |
 | --- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- | ---------------------------------------------------------------------- |
 | Q1  | Domain — does the project belong to a domain with a normative visual language? Options: `banking`, `healthcare`, `aviation`, `industrial-scada`, `energy`, `automotive`, `none/other`. | Always                              | Activates a domain preset in Phase 4 if banking, healthcare, or industrial-scada. |
-| Q2  | Theme axes — how many orthogonal axes does the system need? Options: `mode-only`, `mode + density`, `mode + density + branding`, `custom`.        | Always; default biased by `multiThemeHints` and `multiTenantHints`. | `themingAxes` extension shape.                                         |
+| Q2a | Mode axis — does the product ship light, dark, or both? Options: `both` (default for web in 2026), `light-only`, `dark-only`. | Always; pre-answered `both` if `multiThemeHints` shows any `dark:` class or `data-theme=` selector. | `themingAxes.mode` shape and `values`.                                |
+| Q2b | Other axes — beyond mode, which orthogonal axes does the system need? Options: `none`, `density`, `branding`, `aesthetic`, or any combination.    | Always; default biased by `multiTenantHints` (≥ 3 hints → suggest `branding`). | Additional `themingAxes.<axis>` blocks.                                |
 | Q3  | Tier needs — does the project want explicit primitive / semantic / component tiers, or a flat namespace?                                         | Always; pre-answered "yes" if `hasTokenAssets` shows ≥ 30 tokens. | `tokenTiers` extension on/off.                                         |
 | Q4  | Runtime — do any tokens change between deploys (multi-tenant theme switcher, A/B visual testing, per-user personalization)?                       | Always; pre-answered "yes" if `multiTenantHints` ≥ 3.                | `runtime` extension on/off and `themingAxes.<axis>.runtime: true`.     |
 | Q5  | Anti-pattern catalog — does the team run code review and is the project lifespan long enough to justify a formal catalog?                        | Always; recommended off for solo MVPs. | `antiPatterns` extension on/off.                                       |
@@ -86,7 +87,17 @@ obvious.
 | Q7  | Brand identity — paste brand colors (`primary`, optional `accent`) and fonts. If none, the skill uses neutral defaults.                          | Always.                             | Populates `colors.brand-*` and `typography.*`.                         |
 | Q8  | Output path — DESIGN.md at the repo root or a subpath?                                                                                           | Always; default root.               | File path for Phase 5.                                                 |
 
-The skill never asks more than these eight in the base flow. If a
+Q2 is split into two sub-questions because the mode axis and the
+other axes have different defaults and different signal calibrations.
+For web products in 2026, shipping both light and dark is the
+default expectation: ~70% of users have an OS-level dark preference
+and most component libraries (Radix, shadcn/ui, MUI) ship both out
+of the box. The skill defaults Q2a to `both` unless the user
+explicitly opts out, and asks Q2b separately so a single-mode
+product still gets to express density, branding, or aesthetic axes
+without confusion.
+
+The skill never asks more than these nine in the base flow. If a
 follow-up is genuinely required (e.g. ambiguous Q3 answer), it asks
 that one question on its own and continues.
 

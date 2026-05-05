@@ -169,7 +169,9 @@ describe("bootstrap examples", () => {
     it("includes every invariant id from the industrial-scada preset", () => {
       const { frontMatter } = readDesignMd(designMdPath);
       for (const inv of preset.invariants) {
-        expect(frontMatter).toContain(`id: ${inv.id}`);
+        const escaped = inv.id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const idRegex = new RegExp(`(^|\\s)id:\\s*${escaped}(\\s|$)`, "m");
+        expect(frontMatter).toMatch(idRegex);
       }
     });
 

@@ -17,8 +17,11 @@
 - **Q1 Domain.** `industrial-scada`. The product monitors a
   continuous-process plant; status colors and alarms follow ISA-101
   and ISA-18.2.
-- **Q2 Theme axes.** `mode + branding`. The team wants to keep
-  light/dark and prepare for per-customer accent. No density axis.
+- **Q2a Mode axis.** `both`. The team wants to keep light/dark
+  (web default in 2026; existing `dark:` Tailwind variants already
+  in 12 files).
+- **Q2b Other axes.** `branding`. Prepare for per-customer accent
+  injected at runtime. No density axis.
 - **Q3 Tier needs.** Yes. The existing tailwind colors are raw
   (`brand-green`, `gray-light`, etc.); the team wants a clear
   semantic layer above them.
