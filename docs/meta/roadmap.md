@@ -85,6 +85,38 @@ and avoids the "is this a tokenTiers thing?" confusion.
 
 Origin: session 3.5 review hallazgo H4.
 
+### Meta-schema invariants (`type: schema-shape`)
+
+Some invariants are machine-verifiable but operate on the
+DESIGN.md structure itself rather than on source code (e.g.,
+"`themingAxes.branding.excludedFrom` must include `status-*`").
+These cannot use the current `type: contrast-min | color-floor |
+no-mutation | value-pin | custom` taxonomy because their target
+is the spec, not the codebase.
+
+Proposed: introduce `type: schema-shape` for invariants that
+validate the structure of the DESIGN.md itself. This requires
+extending the parameters schema and the AUDIT detector to know
+how to evaluate against the parsed contract.
+
+Origin: mini-task 4.6 review hallazgo H#9.2
+(`industrial-scada.branding-excluded-from-status`).
+
+### Consider renaming `docs/foundations/` to `docs/spec/`
+
+The directory `docs/foundations/` holds the 10 normative modules
+that constitute the conceptual spec of the skill. The name is
+ambiguous: contributors may not know what belongs there versus
+in `docs/meta/`.
+
+Renaming to `docs/spec/` (or `docs/contracts/`) would make the
+role explicit. Trade-off: rename breaks any external bookmarks
+and requires updating internal references. Defer until the
+modules have substantive content (currently placeholders) so
+the rename is worth the friction.
+
+Origin: mini-task 4.6 review hallazgo H#9.4.
+
 ## Open questions
 
 These are unresolved design decisions awaiting more user data
