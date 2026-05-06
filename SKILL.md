@@ -118,23 +118,56 @@ Goal: report every place the codebase contradicts the DESIGN.md.
 
 ### 3. REFACTOR
 
-Goal: bring code into conformance with the DESIGN.md contract.
+Goal: bring code into conformance with the DESIGN.md contract
+through a plan-first workflow.
 
-- **Inputs accepted:**
-  - a `DESIGN.md` (required)
-  - an `audit-report.json` (recommended) or a finding subset
-  - optional `--dry-run`
-- **Process:**
-  1. Re-validate DESIGN.md and re-audit if no report supplied.
-  2. Plan a minimal diff: replace literals with tokens, hoist
-     mode-specific code to declared axes, remove anti-patterns.
-  3. Apply edits; never invent new tokens — only those declared
-     in the contract.
-  4. Re-run AUDIT; report remaining residue.
-- **Output (canonical):**
-  - file edits in place
-  - `refactor-report.md` (what changed, what was deferred and why)
-  - exit non-zero if any `invariant`-severity finding remains
+REFACTOR is the only capability that MODIFIES source files. It
+runs in two distinct phases, each invoked as a separate command,
+so that the plan is a reviewable artifact (PR-friendly, shareable
+across sessions) before any file is touched.
+
+**Phase 1 — Plan generation** (`refactor plan`)
+
+- Inputs:
+  - `DESIGN.md` (required)
+  - `audit-report.json` (recommended; auto-generated if absent)
+  - optional `--paths` to scope the plan
+- Process:
+  1. Load contract and audit findings.
+  2. Categorize findings as tokenizable (auto-fixable),
+     structural (needs human work), invariant-violation (rejected
+     outright), or deferred (low-confidence match).
+  3. Generate a minimal-diff plan with explicit before/after
+     transformations.
+  4. Validate the plan does not invent tokens — only contract-
+     declared tokens may appear in "After" excerpts.
+- Output: `refactor-plan.md` at the agreed path. Read-only —
+  Phase 1 never modifies source.
+
+**Phase 2 — Plan application** (`refactor apply`)
+
+- Inputs:
+  - `refactor-plan.md` (required, output of Phase 1)
+  - optional `--dry-run` to preview without writing
+- Process:
+  1. Re-validate the plan against the current state of DESIGN.md
+     and the codebase (catches drift between plan generation and
+     apply).
+  2. Apply transformations literally as declared in the plan.
+  3. Re-run AUDIT to detect residual findings.
+  4. Emit a refactor report with applied / deferred / residual
+     summary.
+- Output:
+  - source file edits
+  - `diff.patch` (unified diff of all changes)
+  - `refactor-report.md`
+- Exit codes:
+  - `0` — applied successfully, no residual finding above the
+    `audit.failOn` threshold.
+  - `1` — residual findings above the `audit.failOn` threshold
+    remain.
+  - `2` — configuration error (invalid plan, source drift
+    detected, or DESIGN.md cross-extension violation).
 
 ## Boundaries
 
