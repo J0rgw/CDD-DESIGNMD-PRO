@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "cdd-designmd-pro",
+          "version": "0.2.0",
+          "informationUri": "https://github.com/J0rgw/CDD-DESIGNMD-PRO"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "tier-inversion-hard",
+          "level": "warning",
+          "message": {
+            "text": "Primitive token colors.blue-500 reads from a semantic token (colors.primary). Primitives must hold literal values."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/tokens.css" },
+                "region": {
+                  "startLine": 12,
+                  "startColumn": 3,
+                  "snippet": {
+                    "text": "  --colors-blue-500: var(--colors-primary);\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "tier-inversion-hard",
+          "level": "warning",
+          "message": {
+            "text": "Primitive token colors.gray-50 reads from a semantic token (colors.surface). Primitives must hold literal values."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/tokens.css" },
+                "region": {
+                  "startLine": 13,
+                  "startColumn": 3,
+                  "snippet": {
+                    "text": "  --colors-gray-50: var(--colors-surface);\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "tier-inversion-hard",
+          "level": "warning",
+          "message": {
+            "text": "Primitive token colors.gray-200 reads from a semantic token (colors.border). Primitives must hold literal values."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/tokens.css" },
+                "region": {
+                  "startLine": 14,
+                  "startColumn": 3,
+                  "snippet": {
+                    "text": "  --colors-gray-200: var(--colors-border);\n"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "cdd-designmd-pro",
+          "version": "0.2.0",
+          "informationUri": "https://github.com/J0rgw/CDD-DESIGNMD-PRO"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/components/Button.tsx" },
+                "region": {
+                  "startLine": 8,
+                  "startColumn": 27,
+                  "snippet": {
+                    "text": "      style={{ background: \"#2563EB\", color: \"#F8FAFC\" }}\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/components/Button.tsx" },
+                "region": {
+                  "startLine": 8,
+                  "startColumn": 47,
+                  "snippet": {
+                    "text": "      style={{ background: \"#2563EB\", color: \"#F8FAFC\" }}\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/components/Card.tsx" },
+                "region": {
+                  "startLine": 7,
+                  "startColumn": 27,
+                  "snippet": {
+                    "text": "      style={{ background: \"#F8FAFC\", color: \"#0F172A\" }}\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/components/Card.tsx" },
+                "region": {
+                  "startLine": 7,
+                  "startColumn": 47,
+                  "snippet": {
+                    "text": "      style={{ background: \"#F8FAFC\", color: \"#0F172A\" }}\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/components/AlarmBanner.tsx" },
+                "region": {
+                  "startLine": 7,
+                  "startColumn": 47,
+                  "snippet": {
+                    "text": "      style={{ background: \"#7F1D1D\", color: \"#F8FAFC\" }}\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "status-color-immutable",
+          "level": "error",
+          "message": {
+            "text": "Redeclaration of --colors-status-critical violates the status-color-immutable invariant."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/styles/theme-override.css" },
+                "region": {
+                  "startLine": 8,
+                  "startColumn": 3,
+                  "snippet": {
+                    "text": "  --colors-status-critical: #C62828;\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/components/Card.test.tsx" },
+                "region": {
+                  "startLine": 14,
+                  "startColumn": 30,
+                  "snippet": {
+                    "text": "    const expectedHexAlias = \"#F8FAFC\";\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/components/Card.test.tsx" },
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 28,
+                  "snippet": {
+                    "text": "    expect(expectedHexAlias.toUpperCase()).toBe(\"#F8FAFC\");\n"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "cdd-designmd-pro",
+          "version": "0.2.0",
+          "informationUri": "https://github.com/J0rgw/CDD-DESIGNMD-PRO"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/Button.tsx" },
+                "region": {
+                  "startLine": 7,
+                  "startColumn": 23,
+                  "snippet": {
+                    "text": "      className=\"rounded bg-[#0EA5E9] px-3 py-2 text-sm text-white\"\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/Card.tsx" },
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 30,
+                  "snippet": {
+                    "text": "      style={{ border: \"1px solid #E5E7EB\", borderRadius: 8, padding: 24 }}\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/Header.tsx" },
+                "region": {
+                  "startLine": 4,
+                  "startColumn": 24,
+                  "snippet": {
+                    "text": "      style={{ background: \"#F8FAFC\", borderBottom: \"1px solid #E5E7EB\" }}\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "hardcoded-color-literal",
+          "level": "warning",
+          "message": {
+            "text": "Literal hex color outside of token files. Replace with a token reference from colors.*."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/Header.tsx" },
+                "region": {
+                  "startLine": 7,
+                  "startColumn": 22,
+                  "snippet": {
+                    "text": "      <h1 style={{ color: \"#0F172A\" }}>Dashboard</h1>\n"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

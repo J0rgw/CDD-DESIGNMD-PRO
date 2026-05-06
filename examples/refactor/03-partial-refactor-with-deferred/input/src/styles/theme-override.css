@@ -1,0 +1,9 @@
+/*
+ * Customer-requested override of --status-critical to a softer red.
+ * This is the invariant violation REFACTOR rejects: status colors
+ * are not customizable per tenant under industrial-scada.
+ */
+
+:root[data-tenant="acme-corp"] {
+  --colors-status-critical: #C62828;
+}

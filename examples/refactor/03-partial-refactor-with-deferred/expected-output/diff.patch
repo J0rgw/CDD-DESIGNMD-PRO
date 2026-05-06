@@ -1,0 +1,36 @@
+diff --git a/src/components/AlarmBanner.tsx b/src/components/AlarmBanner.tsx
+--- a/src/components/AlarmBanner.tsx
++++ b/src/components/AlarmBanner.tsx
+@@ -4,7 +4,7 @@ export function AlarmBanner({ children }: PropsWithChildren) {
+   return (
+     <div
+       className="rounded px-3 py-2"
+-      style={{ background: "#7F1D1D", color: "#F8FAFC" }}
++      style={{ background: "var(--colors-status-critical)", color: "var(--colors-text-on-status-dark)" }}
+     >
+       {children}
+     </div>
+diff --git a/src/components/Button.tsx b/src/components/Button.tsx
+--- a/src/components/Button.tsx
++++ b/src/components/Button.tsx
+@@ -5,7 +5,7 @@ export function Button({ children }: PropsWithChildren) {
+     <button
+       type="button"
+       className="rounded px-3 py-2"
+-      style={{ background: "#2563EB", color: "#F8FAFC" }}
++      style={{ background: "var(--colors-primary)", color: "var(--colors-text-on-primary)" }}
+     >
+       {children}
+     </button>
+diff --git a/src/components/Card.tsx b/src/components/Card.tsx
+--- a/src/components/Card.tsx
++++ b/src/components/Card.tsx
+@@ -4,7 +4,7 @@ export function Card({ children }: PropsWithChildren) {
+   return (
+     <section
+       className="rounded p-6"
+-      style={{ background: "#F8FAFC", color: "#0F172A" }}
++      style={{ background: "var(--colors-surface)", color: "var(--colors-text)" }}
+     >
+       {children}
+     </section>

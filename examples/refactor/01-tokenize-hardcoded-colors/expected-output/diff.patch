@@ -1,0 +1,40 @@
+diff --git a/src/Button.tsx b/src/Button.tsx
+--- a/src/Button.tsx
++++ b/src/Button.tsx
+@@ -4,7 +4,7 @@ export function Button({ children }: PropsWithChildren) {
+   return (
+     <button
+       type="button"
+-      className="rounded bg-[#0EA5E9] px-3 py-2 text-sm text-white"
++      className="rounded bg-primary px-3 py-2 text-sm text-on-primary"
+     >
+       {children}
+     </button>
+diff --git a/src/Card.tsx b/src/Card.tsx
+--- a/src/Card.tsx
++++ b/src/Card.tsx
+@@ -3,7 +3,7 @@ import type { PropsWithChildren } from "react";
+ export function Card({ children }: PropsWithChildren) {
+   return (
+     <section
+-      style={{ border: "1px solid #E5E7EB", borderRadius: 8, padding: 24 }}
++      style={{ border: "1px solid var(--colors-border)", borderRadius: 8, padding: 24 }}
+     >
+       {children}
+     </section>
+diff --git a/src/Header.tsx b/src/Header.tsx
+--- a/src/Header.tsx
++++ b/src/Header.tsx
+@@ -1,9 +1,9 @@
+ export function Header() {
+   return (
+     <header
+-      style={{ background: "#F8FAFC", borderBottom: "1px solid #E5E7EB" }}
++      style={{ background: "var(--colors-surface)", borderBottom: "1px solid var(--colors-border)" }}
+       className="flex items-center justify-between px-4 py-3"
+     >
+-      <h1 style={{ color: "#0F172A" }}>Dashboard</h1>
++      <h1 style={{ color: "var(--colors-text)" }}>Dashboard</h1>
+     </header>
+   );
+ }

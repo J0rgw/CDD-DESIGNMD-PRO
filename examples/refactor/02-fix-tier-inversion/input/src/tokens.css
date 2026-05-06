@@ -1,0 +1,15 @@
+:root {
+  --colors-primary: #0EA5E9;
+  --colors-surface: #F8FAFC;
+  --colors-border: #E5E7EB;
+  --colors-text: #0F172A;
+
+  /*
+   * Primitives below were rewritten to reference semantics during
+   * an experiment last quarter; this is a hard tier inversion and
+   * is what REFACTOR resolves.
+   */
+  --colors-blue-500: var(--colors-primary);
+  --colors-gray-50: var(--colors-surface);
+  --colors-gray-200: var(--colors-border);
+}

@@ -1,0 +1,14 @@
+diff --git a/src/tokens.css b/src/tokens.css
+--- a/src/tokens.css
++++ b/src/tokens.css
+@@ -9,7 +9,7 @@
+    * an experiment last quarter; this is a hard tier inversion and
+    * is what REFACTOR resolves.
+    */
+-  --colors-blue-500: var(--colors-primary);
+-  --colors-gray-50: var(--colors-surface);
+-  --colors-gray-200: var(--colors-border);
++  --colors-blue-500: #0EA5E9;
++  --colors-gray-50: #F8FAFC;
++  --colors-gray-200: #E5E7EB;
+ }
